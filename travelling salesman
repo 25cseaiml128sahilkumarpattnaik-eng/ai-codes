@@ -1,0 +1,55 @@
+def tsp(cost_matrix):
+    n = len(cost_matrix)
+    # VISITED_ALL represents the state where all cities have been visited.
+    # For example, if n = 4, VISITED_ALL = (1 << 4) - 1 = 1111 in binary (15).
+    VISITED_ALL = (1 << n) - 1
+    
+    # Memoization table to store results of subproblems.
+    # Dimensions: [2^n][n] (States of visited cities x Current city)
+    memo = [[None] * n for _ in range(1 << n)]
+
+    def solve(mask, pos):
+        # Base Case: If all cities have been visited, return the cost to go 
+        # back to the starting city (0).
+        if mask == VISITED_ALL:
+            return cost_matrix[pos][0]
+
+        # Return the result if it has already been computed
+        if memo[mask][pos] is not None:
+            return memo[mask][pos]
+
+        min_cost = float('inf')
+
+        # Try to visit all next unvisited cities
+        for next_city in range(n):
+            # Check if the next_city has not been visited yet
+            if (mask & (1 << next_city)) == 0:
+                # Update the mask to mark next_city as visited
+                new_mask = mask | (1 << next_city)
+                
+                # Calculate new cost recursively
+                new_cost = cost_matrix[pos][next_city] + solve(new_mask, next_city)
+                
+                # Keep track of the minimum cost found
+                min_cost = min(min_cost, new_cost)
+
+        # Store the computed result in the memo table
+        memo[mask][pos] = min_cost
+        return min_cost
+
+    # Start the tour from city 0. The mask is 1 (binary 0001) because city 0 is visited.
+    return solve(1, 0)
+
+
+# Example usage:
+if __name__ == "__main__":
+    # Cost matrix representing distances between 4 cities
+    # matrix[i][j] is the cost to travel from city i to city j
+    graph = [
+        [0, 10, 15, 20],
+        [10, 0, 35, 25],
+        [15, 35, 0, 30],
+        [20, 25, 30, 0]
+    ]
+
+    print("The minimum travel cost is:", tsp(graph))
