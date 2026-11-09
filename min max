@@ -1,0 +1,11 @@
+numbers = [15, 42, 8, 91, 23]
+
+# Find min and max of a list
+minimum_val = min(numbers)
+maximum_val = max(numbers)
+
+print("Minimum:", minimum_val)  # Output: 8
+print("Maximum:", maximum_val)  # Output: 91
+
+# You can also pass direct arguments instead of a list
+print(min(10, 20, 30))  # Output: 10
