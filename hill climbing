@@ -1,0 +1,30 @@
+import random
+
+
+def objective_function(x):
+    """The function we want to maximize (Peak is at x = 3, y = 10)."""
+    return -((x - 3) ** 2) + 10
+
+
+def hill_climbing(max_iterations=1000, step_size=0.1):
+    # 1. Start at a random initial point
+    current_x = random.uniform(-10, 10)
+    current_y = objective_function(current_x)
+
+    for i in range(max_iterations):
+        # 2. Tweak the current point to find a neighbor
+        next_x = current_x + random.uniform(-step_size, step_size)
+        next_y = objective_function(next_x)
+
+        # 3. If the neighbor is better, move there
+        if next_y > current_y:
+            current_x, current_y = next_x, next_y
+
+    return current_x, current_y
+
+
+# Execute the algorithm
+best_x, best_y = hill_climbing()
+
+print(f"Best X found: {best_x:.4f}")
+print(f"Best Y (Max Value) found: {best_y:.4f}")
